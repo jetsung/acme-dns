@@ -1,0 +1,63 @@
+# acme-dns 配置文件（TOML）
+
+[general]
+# DNS 监听地址。注意 systemd-resolved 可能占用 127.0.0.53:53
+listen = "0.0.0.0:53"
+# 监听协议："both", "both4", "both6", "udp", "udp4", "udp6", "tcp", "tcp4", "tcp6"
+protocol = "both"
+# 服务的域名
+domain = "auth.example.org"
+# SOA 的 zone name server
+nsname = "auth.example.org"
+# SOA 管理员邮箱，@ 替换为 .
+nsadmin = "admin.example.org"
+# 静态预置记录（除 TXT 外）
+records = [
+    "auth.example.org. A 198.51.100.1",
+    "auth.example.org. NS auth.example.org.",
+]
+# CORS 等调试日志
+debug = false
+
+[database]
+# 数据库连接串：scheme 决定 engine（sqlite: / postgres:）。
+# 也可用环境变量 ACME_DNS_DATABASE_URL 或 DATABASE_URL（优先级更高）。
+url = "sqlite://acme-dns.db"
+
+[api]
+# API 监听地址 host:port；也可用 env ACME_DNS_API_HOST（优先级最高）。
+host = "0.0.0.0:80"
+# 关闭 /register 端点
+disable_registration = false
+# 可选值："cert", "none"（letsencrypt 系列保留兼容，当前未内置 ACME 客户端）
+tls = "none"
+# tls = "cert" 时使用
+#tls_cert_privkey = "/etc/tls/example.org/privkey.pem"
+#tls_cert_fullchain = "/etc/tls/example.org/fullchain.pem"
+# letsencrypt 模式的缓存目录（保留字段）
+#acme_cache_dir = "api-certs"
+# Let's Encrypt 到期通知邮箱（保留字段）
+#notification_email = ""
+# CORS AllowOrigins，可用通配符
+corsorigins = ["*"]
+# 用 HTTP 头解析客户端 IP（反代场景）
+use_header = false
+# 从哪个头取 IP 列表
+header_name = "X-Forwarded-For"
+# 是否发送 HSTS 头
+hsts_enabled = false
+hsts_max_age = 31536000
+hsts_include_subdomains = false
+hsts_preload = false
+# 管理端 /admin/* Bearer token；为空时管理 API 不挂载。
+# 生成方式：acme-dns keygen（默认 48 字符，可选长度 8-256）。
+admin_token = ""
+
+# 日志段 [log]（字段无前缀）。
+[log]
+# "error", "warning", "info" or "debug"
+level = "info"
+# 输出目标（当前支持 stdout）
+type = "stdout"
+# "json" or "text"
+format = "text"

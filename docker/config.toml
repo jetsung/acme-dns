@@ -1,0 +1,33 @@
+# Docker 容器专用配置：监听 0.0.0.0，SQLite 落盘到挂载卷
+[general]
+listen = "0.0.0.0:53"
+protocol = "both"
+domain = "auth.example.org"
+nsname = "auth.example.org"
+nsadmin = "admin.example.org"
+records = [
+    "auth.example.org. A 198.51.100.1",
+    "auth.example.org. NS auth.example.org.",
+]
+debug = false
+
+[database]
+# 连接串优先；也可用 env ACME_DNS_DATABASE_URL / DATABASE_URL 覆盖
+url = "sqlite:///var/lib/acme-dns/acme-dns.db"
+
+[api]
+host = "0.0.0.0:80"
+tls = "none"
+disable_registration = false
+corsorigins = ["*"]
+use_header = false
+header_name = "X-Forwarded-For"
+hsts_enabled = false
+hsts_max_age = 31536000
+hsts_include_subdomains = false
+hsts_preload = false
+
+[log]
+level = "info"
+type = "stdout"
+format = "text"

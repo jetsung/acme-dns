@@ -1,0 +1,47 @@
+[package]
+name = "acme-dns"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "acme-dns"
+path = "src/main.rs"
+
+[lib]
+name = "acme_dns"
+path = "src/lib.rs"
+
+[features]
+default = []
+postgres = ["sqlx/postgres"]
+
+[dependencies]
+async-trait = "0.1"
+ipnet = "2"
+axum = { version = "0.8", features = ["macros"] }
+bcrypt = "0.19"
+chrono = { version = "0.4", features = ["serde"] }
+hyper-util = { version = "0.1", features = ["service", "server-auto", "tokio"] }
+hickory-proto = "0.26"
+rand = "0.10"
+rustls = { version = "0.23", features = ["ring"] }
+rustls-pemfile = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sqlx = { version = "0.9", default-features = false, features = ["runtime-tokio", "tls-rustls", "sqlite", "chrono"] }
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+tokio-rustls = "0.26"
+toml = "1.2"
+tower = "0.5"
+tower-http = { version = "0.7", features = ["cors", "timeout", "trace"] }
+tracing = "0.1"
+tracing-appender = "0.2"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "fmt", "chrono"] }
+
+uuid = { version = "1", features = ["v4"] }
+
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "json"] }
+
+[dev-dependencies]
+tempfile = "3"

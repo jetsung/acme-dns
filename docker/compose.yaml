@@ -1,0 +1,18 @@
+services:
+  acme-dns:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: acme-dns:latest
+    container_name: acme-dns
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80"
+    volumes:
+      - ./config.toml:/etc/acme-dns/config.toml:ro
+      - acme-dns-data:/var/lib/acme-dns
+
+volumes:
+  acme-dns-data:
